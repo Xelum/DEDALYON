@@ -3,213 +3,112 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#09090d">
-  <meta name="description" content="Medusa Games: mini giochi browser veloci, colorati e immediati. Gioca a Forgefall, costruisci difese in 5 mosse e sopravvivi all'orda.">
-  <title>Medusa Games — Play the chaos</title>
-  <link rel="icon" type="image/svg+xml" href="medusa-logo.svg">
-  <link rel="stylesheet" href="style.css">
-  <script defer src="games.js"></script>
-  <script defer src="app.js"></script>
-  <script defer src="forgefall.js"></script>
+  <meta name="theme-color" content="#172136">
+  <meta name="description" content="Forgefall: puzzle match-3 e tower defense di Medusa Games.">
+  <title>Forgefall — Medusa Games</title>
+  <link rel="stylesheet" href="game.css">
+  <script defer src="game.js"></script>
 </head>
 <body>
-  <a class="skip-link" href="#games">Vai ai giochi</a>
+  <main class="page-shell">
+    <aside class="desktop-note left-note" aria-hidden="true">
+      <span class="note-kicker">MEDUSA GAMES / 01</span>
+      <h1>FORGE<br>FALL</h1>
+      <p>Costruisci con le fusioni. Sopravvivi quando il turno finisce.</p>
+      <div class="sigil">✦</div>
+    </aside>
 
-  <div class="ambient-bg" aria-hidden="true">
-    <span class="blob blob-a"></span>
-    <span class="blob blob-b"></span>
-    <span class="blob blob-c"></span>
-    <span class="noise"></span>
-    <span class="grid-glow"></span>
-  </div>
-
-  <header class="site-header">
-    <a href="#top" class="brand" aria-label="Medusa Games, torna all'inizio">
-      <span class="brand-mark" aria-hidden="true">
-        <svg viewBox="0 0 92 92" role="img">
-          <defs>
-            <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0" stop-color="#ff5a1f"/>
-              <stop offset="1" stop-color="#ff9b3d"/>
-            </linearGradient>
-          </defs>
-          <path d="M46 10c18 0 31 12 31 29 0 12-6 21-15 26-3 2-3 6 0 8 6 4 4 9-1 9-7 0-10-8-15-8s-8 8-15 8c-5 0-7-5-1-9 3-2 3-6 0-8-9-5-15-14-15-26 0-17 13-29 31-29Z" fill="url(#g)"/>
-          <path d="M28 38c5-10 31-10 36 0" fill="none" stroke="#160f12" stroke-width="5" stroke-linecap="round"/>
-          <circle cx="35" cy="46" r="4" fill="#160f12"/>
-          <circle cx="57" cy="46" r="4" fill="#160f12"/>
-          <path d="M34 58c7 6 17 6 24 0" fill="none" stroke="#160f12" stroke-width="4" stroke-linecap="round"/>
-          <path d="M23 29c-9 2-12 8-9 15M69 29c9 2 12 8 9 15M29 21c-8-6-14-4-16 2M63 21c8-6 14-4 16 2" fill="none" stroke="#ff7a2e" stroke-width="5" stroke-linecap="round"/>
-        </svg>
-      </span>
-      <span class="brand-copy"><strong>MEDUSA</strong><em>GAMES</em></span>
-    </a>
-
-    <nav aria-label="Navigazione principale">
-      <a href="#games">Giochi</a>
-      <a href="#how">Come funziona</a>
-      <a href="#arsenal">Arsenale</a>
-    </nav>
-
-    <button class="sound-toggle" type="button" aria-pressed="false" aria-label="Attiva audio">
-      <span class="sound-dot"></span><span>AUDIO OFF</span>
-    </button>
-  </header>
-
-  <main id="top">
-    <section class="hero section-pad">
-      <div class="hero-copy reveal">
-        <div class="pill"><span></span> MINI GAMES · ZERO DOWNLOAD</div>
-        <h1>Partite veloci.<br><span>Caos infinito.</span></h1>
-        <p class="hero-lead">Medusa Games è un piccolo arcade nel browser: giochi immediati, facili da capire e difficili da mollare.</p>
-        <div class="hero-actions">
-          <button class="primary-cta" data-open-game="forgefall">Gioca a Forgefall <span>↗</span></button>
-          <a class="ghost-cta" href="#games">Scopri i giochi <span>↓</span></a>
+    <section class="game" aria-label="Forgefall">
+      <header class="topbar">
+        <a class="back-home" href="../../index.html" aria-label="Torna a Medusa Games">←</a>
+        <div class="game-title">
+          <small>MEDUSA GAMES</small>
+          <strong>FORGEFALL</strong>
         </div>
-        <div class="hero-stats" aria-label="Caratteristiche">
-          <div><strong>6×6</strong><span>griglia tattica</span></div>
-          <div><strong>5</strong><span>mosse per prepararti</span></div>
-          <div><strong>∞</strong><span>orde da superare</span></div>
-        </div>
-      </div>
-
-      <div class="hero-art reveal" aria-hidden="true">
-        <div class="mascot-orbit orbit-one">✦</div>
-        <div class="mascot-orbit orbit-two">⚔</div>
-        <div class="mascot-orbit orbit-three">♦</div>
-        <div class="medusa-card">
-          <div class="spark spark-a"></div>
-          <div class="spark spark-b"></div>
-          <div class="medusa-face">
-            <span class="snake s1"></span><span class="snake s2"></span><span class="snake s3"></span>
-            <span class="snake s4"></span><span class="snake s5"></span><span class="snake s6"></span>
-            <div class="head">
-              <span class="eye e1"></span><span class="eye e2"></span>
-              <span class="smirk"></span>
-            </div>
-            <span class="tentacle t1"></span><span class="tentacle t2"></span><span class="tentacle t3"></span>
-          </div>
-          <div class="card-label"><span>MEDUSA ARCADE</span><b>PLAY THE CHAOS</b></div>
-        </div>
-        <div class="float-card fc-a"><small>WAVE</small><strong>10</strong><span>OFFICINA!</span></div>
-        <div class="float-card fc-b"><small>COMBO</small><strong>x3</strong><span>UPGRADE</span></div>
-      </div>
-    </section>
-
-    <section class="ticker" aria-hidden="true">
-      <div class="ticker-track">
-        <span>PLAY · BUILD · SURVIVE · COMBINE · UPGRADE · REPEAT ·</span>
-        <span>PLAY · BUILD · SURVIVE · COMBINE · UPGRADE · REPEAT ·</span>
-      </div>
-    </section>
-
-    <section id="games" class="games-section section-pad">
-      <div class="section-head reveal">
-        <div>
-          <p class="kicker">01 / GAME HUB</p>
-          <h2>Un portale.<br><em>Tanti giochi.</em></h2>
-        </div>
-        <p>Forgefall è il primo. Gli altri slot sono già pronti per trasformare Medusa Games in un vero piccolo portale arcade.</p>
-      </div>
-      <div id="game-grid" class="game-grid"></div>
-    </section>
-
-    <section id="how" class="how-section section-pad">
-      <div class="section-head narrow reveal">
-        <div>
-          <p class="kicker">02 / FORGEFALL</p>
-          <h2>Hai cinque mosse.<br><em>Poi arriva l'orda.</em></h2>
-        </div>
-      </div>
-      <div class="steps-grid">
-        <article class="step-card reveal"><span class="step-num">01</span><div class="step-icon">✣</div><h3>Combina</h3><p>Scambia due caselle adiacenti e allinea almeno tre materiali uguali.</p></article>
-        <article class="step-card reveal"><span class="step-num">02</span><div class="step-icon">⌂</div><h3>Costruisci</h3><p>Ogni tris crea una struttura. Tre strutture uguali diventano una struttura potenziata.</p></article>
-        <article class="step-card reveal"><span class="step-num">03</span><div class="step-icon">☄</div><h3>Sopravvivi</h3><p>Finite le mosse, i mostri avanzano. Le tue strutture combattono automaticamente.</p></article>
-        <article class="step-card reveal"><span class="step-num">10</span><div class="step-icon">∞</div><h3>Officina</h3><p>Ogni 10 livelli puoi riordinare la griglia senza limite di mosse e senza nuovi spawn.</p></article>
-      </div>
-    </section>
-
-    <section id="arsenal" class="arsenal-section section-pad">
-      <div class="section-head reveal">
-        <div>
-          <p class="kicker">03 / MATERIALI</p>
-          <h2>Sei simboli.<br><em>Sei modi di difenderti.</em></h2>
-        </div>
-        <p>Ogni materiale ha un ruolo diverso: attacco, controllo, bonus mosse o potenziamento delle difese.</p>
-      </div>
-      <div class="arsenal-grid">
-        <article class="material-card ice reveal"><span class="material-icon">❄</span><small>GHIACCIO</small><h3>Muro glaciale</h3><p>Rallenta i mostri nella corsia.</p></article>
-        <article class="material-card copper reveal"><span class="material-icon">⌁</span><small>RAME</small><h3>Torre arcieri</h3><p>Colpisce la corsia e quelle adiacenti.</p></article>
-        <article class="material-card iron reveal"><span class="material-icon">⬢</span><small>FERRO</small><h3>Cannone</h3><p>Spara in orizzontale con danno ad area.</p></article>
-        <article class="material-card fire reveal"><span class="material-icon">◆</span><small>FUOCO</small><h3>Balestra</h3><p>Attacca verticalmente nella propria colonna.</p></article>
-        <article class="material-card wood reveal"><span class="material-icon">▤</span><small>LEGNO</small><h3>Cassa</h3><p>Quando nasce regala 2, 3 o 4 mosse extra.</p></article>
-        <article class="material-card gold reveal"><span class="material-icon">✦</span><small>ORO</small><h3>Totem</h3><p>Potenzia il danno delle strutture vicine.</p></article>
-      </div>
-    </section>
-
-    <section class="final-cta section-pad reveal">
-      <div class="final-card">
-        <div><p class="kicker">READY?</p><h2>Fai la tua prima<br><em>difesa.</em></h2></div>
-        <button class="primary-cta giant" data-open-game="forgefall">Avvia Forgefall <span>↗</span></button>
-      </div>
-    </section>
-  </main>
-
-  <footer class="site-footer">
-    <a href="#top" class="footer-brand">MEDUSA GAMES</a>
-    <span>Browser arcade · concept 2026</span>
-    <a href="#top">Torna su ↑</a>
-  </footer>
-
-  <dialog id="game-dialog" class="game-dialog" aria-labelledby="game-title">
-    <div class="game-shell">
-      <header class="game-topbar">
-        <div class="game-branding">
-          <span class="mini-medusa">M</span>
-          <div><small>MEDUSA GAMES / PROTOTIPO 01</small><h2 id="game-title">FORGEFALL <span>5 mosse prima dell'orda</span></h2></div>
-        </div>
-        <div class="game-top-actions">
-          <button id="restart-game" class="mini-button" type="button">Ricomincia</button>
-          <button id="close-game" class="close-button" type="button" aria-label="Chiudi gioco">✕</button>
-        </div>
+        <button id="sound-btn" class="icon-btn" type="button" aria-pressed="false" aria-label="Attiva audio">♪</button>
       </header>
 
-      <div class="game-hud">
-        <div><span>LIVELLO</span><strong id="hud-level">1</strong></div>
-        <div><span>MOSSE</span><strong id="hud-moves">5</strong></div>
-        <div><span>BASE</span><strong id="hud-base">♥ ♥ ♥ ♥ ♥</strong></div>
-        <div><span>PUNTI</span><strong id="hud-score">0000</strong></div>
-        <div><span>RECORD</span><strong id="hud-best">1</strong></div>
+      <section class="fortress" aria-label="Bastione">
+        <div class="moon"></div>
+        <div class="cloud cloud-a"></div>
+        <div class="cloud cloud-b"></div>
+        <div class="mountains"></div>
+        <div class="castle" aria-hidden="true">
+          <div class="tower left"><span></span></div>
+          <div class="keep"><i></i><b></b><em></em></div>
+          <div class="tower right"><span></span></div>
+          <div class="gate"></div>
+        </div>
+        <div class="banner">BASTIONE DI CENERE</div>
+      </section>
+
+      <section class="hud" aria-label="Stato partita">
+        <div class="hud-box"><span>GIORNO</span><strong id="hud-day">1</strong></div>
+        <div class="hud-box moves"><span>MOSSE</span><strong id="hud-moves">5</strong></div>
+        <div class="hud-box wide"><span>BASTIONE</span><strong id="hud-hearts" aria-label="5 vite">♥ ♥ ♥ ♥ ♥</strong></div>
+        <div class="hud-box"><span>PUNTI</span><strong id="hud-score">0</strong></div>
+      </section>
+
+      <div id="phase-ribbon" class="phase-ribbon build">
+        <span id="phase-title">PREPARA LE DIFESE</span>
+        <small id="phase-copy">Ogni scambio costa 1 mossa. Anche se non crea un tris.</small>
       </div>
 
-      <div class="game-layout">
-        <section class="board-panel">
-          <div class="panel-title"><div><small>FASE COSTRUZIONE</small><strong id="phase-label">CREA LE DIFESE</strong></div><span id="combo-label">Allinea 3 simboli</span></div>
-          <div id="board" class="board" aria-label="Griglia di gioco 6 per 6"></div>
-          <div class="board-actions">
-            <span id="selection-help">Seleziona due caselle adiacenti per scambiarle.</span>
-            <button id="finish-workshop" class="workshop-button" type="button" hidden>Termina officina →</button>
-          </div>
-        </section>
+      <section class="battlefield" id="battlefield">
+        <div id="boss-warning" class="boss-warning" hidden>
+          <span>⚠</span><b>BOSS IN ARRIVO</b><small id="boss-lane-copy">Prepara la corsia</small>
+        </div>
+        <div id="board" class="board" aria-label="Griglia 6 per 6"></div>
+        <canvas id="battle-layer" aria-hidden="true"></canvas>
+        <div id="wave-banner" class="wave-banner" hidden><span>ORDA</span><strong id="wave-number">1</strong></div>
+        <div id="toast" class="toast" role="status" aria-live="polite"></div>
+      </section>
 
-        <section class="battle-panel">
-          <div class="panel-title"><div><small>CAMPO DI BATTAGLIA</small><strong id="wave-label">ORDA IN ATTESA</strong></div><span id="enemy-count">0 nemici</span></div>
-          <div class="battle-wrap">
-            <canvas id="battle-canvas" width="900" height="480" aria-label="Campo di battaglia"></canvas>
-            <div id="battle-overlay" class="battle-overlay">
-              <span class="overlay-icon">☄</span>
-              <strong id="overlay-title">PREPARA LA GRIGLIA</strong>
-              <p id="overlay-copy">Quando finiscono le mosse, l'orda parte automaticamente.</p>
-            </div>
-          </div>
-          <div class="legend-row">
-            <span><i class="lg ice"></i> rallenta</span><span><i class="lg copper"></i> arcieri</span><span><i class="lg iron"></i> cannone</span><span><i class="lg fire"></i> balestra</span><span><i class="lg gold"></i> boost</span>
-          </div>
-        </section>
-      </div>
+      <section class="controls-strip">
+        <div class="hint"><span class="drag-icon">↔</span><p><strong>TRASCINA</strong><br>una tessera su quella vicina</p></div>
+        <button id="end-workshop" class="action-btn" type="button" hidden>TERMINA OFFICINA</button>
+        <button id="restart-btn" class="ghost-btn" type="button">RICOMINCIA</button>
+      </section>
 
-      <div class="game-tip"><strong>TIP:</strong> le fusioni a cascata non consumano mosse extra. Le casse di legno regalano immediatamente da 2 a 4 mosse.</div>
-      <div id="game-announcement" class="sr-only" aria-live="polite"></div>
-    </div>
-  </dialog>
+      <section class="legend" aria-label="Materiali">
+        <button class="legend-chip ice" type="button" data-help="ice"><i></i><span>GHIACCIO</span></button>
+        <button class="legend-chip copper" type="button" data-help="copper"><i></i><span>RAME</span></button>
+        <button class="legend-chip iron" type="button" data-help="iron"><i></i><span>FERRO</span></button>
+        <button class="legend-chip fire" type="button" data-help="fire"><i></i><span>FUOCO</span></button>
+        <button class="legend-chip wood" type="button" data-help="wood"><i></i><span>LEGNO</span></button>
+        <button class="legend-chip gold" type="button" data-help="gold"><i></i><span>ORO</span></button>
+      </section>
+
+      <dialog id="help-dialog" class="help-dialog">
+        <button id="help-close" class="help-close" aria-label="Chiudi">×</button>
+        <div id="help-icon" class="help-big-icon"></div>
+        <small id="help-type">MATERIALE</small>
+        <h2 id="help-title"></h2>
+        <p id="help-copy"></p>
+      </dialog>
+
+      <dialog id="gameover-dialog" class="gameover-dialog">
+        <div class="gameover-medal">☄</div>
+        <small>IL BASTIONE È CADUTO</small>
+        <h2>GIORNO <span id="final-day">1</span></h2>
+        <p>Hai totalizzato <strong id="final-score">0</strong> punti.</p>
+        <div class="dialog-actions">
+          <button id="again-btn" class="action-btn" type="button">RIPROVA</button>
+          <a href="../../index.html" class="ghost-btn">HOME</a>
+        </div>
+      </dialog>
+    </section>
+
+    <aside class="desktop-note right-note">
+      <span class="note-kicker">REGOLE RAPIDE</span>
+      <ol>
+        <li><b>3 materiali</b><span>creano una difesa</span></li>
+        <li><b>3 difese uguali</b><span>creano un livello superiore</span></li>
+        <li><b>0 mosse</b><span>fa partire l'orda</span></li>
+        <li><b>Ogni 10 giorni</b><span>boss + officina libera</span></li>
+      </ol>
+      <p class="tiny-copy">Il combattimento avviene direttamente sopra la griglia: le strutture che costruisci restano esattamente dove le hai create.</p>
+    </aside>
+  </main>
 </body>
 </html>
