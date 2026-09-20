@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0f1522">
+  <meta name="description" content="Forgefall: puzzle match-3 e tower defense orizzontale di Medusa Games.">
+  <title>Forgefall — Medusa Games</title>
+  <link rel="stylesheet" href="game.css">
+  <script defer src="game.js"></script>
+</head>
+<body>
+  <main class="app-shell">
+    <header class="topbar">
+      <a class="back-btn" href="../../index.html" aria-label="Torna alla home">←</a>
+      <div class="brand-lockup">
+        <small>MEDUSA GAMES</small>
+        <strong>FORGEFALL</strong>
+      </div>
+      <button id="sound-btn" class="top-icon" type="button" aria-pressed="false" aria-label="Audio">♪</button>
+    </header>
+
+    <section class="status-bar">
+      <div class="brand-panel card">
+        <span class="eyebrow">MINI GAME / 01</span>
+        <h1>FORGEFALL</h1>
+        <p>Fondi materiali, crea vere difese in 2D e resisti all'orda nel campo di battaglia.</p>
+      </div>
+
+      <div class="castle-panel card">
+        <div class="skyline" aria-hidden="true">
+          <div class="moon"></div>
+          <div class="hill hill-a"></div>
+          <div class="hill hill-b"></div>
+          <div class="castle">
+            <div class="tower left"></div>
+            <div class="keep"></div>
+            <div class="tower right"></div>
+            <div class="gate"></div>
+          </div>
+        </div>
+        <div class="castle-meta">
+          <span class="castle-name">BASTIONE DI CENERE</span>
+          <span id="phase-title" class="phase-pill build">PREPARA LE DIFESE</span>
+          <p id="phase-copy">Ogni scambio costa 1 mossa. Anche se non crea un tris.</p>
+        </div>
+      </div>
+
+      <div class="stats-panel card" aria-label="Stato partita">
+        <div class="stat"><span>GIORNO</span><strong id="hud-day">1</strong></div>
+        <div class="stat"><span>MOSSE</span><strong id="hud-moves">5</strong></div>
+        <div class="stat wide"><span>BASTIONE</span><strong id="hud-hearts">♥ ♥ ♥ ♥ ♥</strong></div>
+        <div class="stat"><span>PUNTI</span><strong id="hud-score">0</strong></div>
+      </div>
+    </section>
+
+    <section class="play-layout">
+      <section class="build-panel panel">
+        <div class="panel-head">
+          <div>
+            <span class="eyebrow">GRIGLIA DI FUSIONE</span>
+            <h2>Costruzione</h2>
+          </div>
+          <div class="panel-tags">
+            <span class="tag">6×6</span>
+            <span class="tag">Match + Swap</span>
+          </div>
+        </div>
+        <div id="board" class="board" aria-label="Griglia di gioco 6 per 6"></div>
+        <div class="legend-grid" aria-label="Materiali disponibili">
+          <button class="legend-chip ice" type="button" data-help="ice"><i></i><span>Ghiaccio</span></button>
+          <button class="legend-chip copper" type="button" data-help="copper"><i></i><span>Rame</span></button>
+          <button class="legend-chip iron" type="button" data-help="iron"><i></i><span>Ferro</span></button>
+          <button class="legend-chip fire" type="button" data-help="fire"><i></i><span>Fuoco</span></button>
+          <button class="legend-chip wood" type="button" data-help="wood"><i></i><span>Legno</span></button>
+          <button class="legend-chip gold" type="button" data-help="gold"><i></i><span>Oro</span></button>
+        </div>
+      </section>
+
+      <section class="battle-panel panel">
+        <div class="panel-head battle-head">
+          <div>
+            <span class="eyebrow">CAMPO DI BATTAGLIA</span>
+            <h2>Assedio</h2>
+          </div>
+          <div class="wave-side">
+            <div id="wave-badge" class="wave-badge">CALMA</div>
+            <div id="boss-warning" class="boss-warning" hidden>⚠ Boss in arrivo · <span id="boss-lane-copy">Corsia 1</span></div>
+          </div>
+        </div>
+        <div class="battle-wrap">
+          <canvas id="battle-canvas" aria-hidden="true"></canvas>
+          <div id="toast" class="toast" role="status" aria-live="polite"></div>
+        </div>
+        <div class="battle-footer">
+          <div class="hint-card"><span>↔</span><p><b>TRASCINA</b><br>scambia due caselle vicine</p></div>
+          <div class="hint-card"><span>▣</span><p><b>CASSA</b><br>tocca per aprirla</p></div>
+          <div class="hint-card"><span>⚔</span><p><b>ONDATA</b><br>i mostri marciano da destra</p></div>
+        </div>
+      </section>
+    </section>
+
+    <footer class="bottom-bar">
+      <div class="rules-line">
+        <span>3 materiali → struttura</span>
+        <span>3 strutture uguali → livello superiore</span>
+        <span>ogni 10 giorni → boss + officina</span>
+      </div>
+      <div class="actions-line">
+        <button id="end-workshop" class="action-btn" type="button" hidden>TERMINA OFFICINA</button>
+        <button id="restart-btn" class="ghost-btn" type="button">RICOMINCIA</button>
+      </div>
+    </footer>
+
+    <dialog id="help-dialog" class="overlay-dialog">
+      <button id="help-close" class="dialog-close" aria-label="Chiudi">×</button>
+      <div id="help-icon" class="help-hero"></div>
+      <small id="help-type">MATERIALE</small>
+      <h3 id="help-title">Titolo</h3>
+      <p id="help-copy">Descrizione</p>
+    </dialog>
+
+    <dialog id="gameover-dialog" class="overlay-dialog gameover-dialog">
+      <div class="gameover-badge">☄</div>
+      <small>IL BASTIONE È CADUTO</small>
+      <h3>GIORNO <span id="final-day">1</span></h3>
+      <p>Hai totalizzato <strong id="final-score">0</strong> punti.</p>
+      <div class="dialog-actions">
+        <button id="again-btn" class="action-btn" type="button">RIPROVA</button>
+        <a href="../../index.html" class="ghost-btn">HOME</a>
+      </div>
+    </dialog>
+  </main>
+</body>
+</html>
