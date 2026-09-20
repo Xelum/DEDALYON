@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#030817">
+  <meta name="description" content="NADIR. Dallo spazio alle profondità: segui la luce, scopri i giochi e inizia la tua discesa.">
+  <title>NADIR — Oltre la superficie</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23030817'/%3E%3Cpath d='M16 18v28l32-28v28M16 32h32' fill='none' stroke='%2385e7ff' stroke-width='4'/%3E%3C/svg%3E">
+  <link rel="preload" as="image" href="assets/space.webp">
+  <link rel="stylesheet" href="style.css">
+  <script defer src="games.js"></script>
+  <script defer src="app.js"></script>
+  <script defer src="lumen.js"></script>
+</head>
+<body>
+  <a class="skip-link" href="#giochi">Vai ai giochi</a>
+  <div class="world" aria-hidden="true">
+    <div class="scene scene-space"><img src="assets/space.webp" alt="" fetchpriority="high" width="1920" height="1080"></div>
+    <div class="scene scene-sky"><img src="assets/sky.webp" alt="" width="1920" height="1080"></div>
+    <div class="scene scene-cave"><img src="assets/cave.webp" alt="" width="1920" height="1080"></div>
+    <div class="cave-reveal"><img src="assets/cave.webp" alt="" width="1920" height="1080"></div>
+    <div class="world-shade"></div>
+    <div class="atmosphere-haze"></div>
+    <canvas id="particles"></canvas>
+    <div class="light-traveller"><i></i><span></span></div>
+    <div class="grain"></div>
+  </div>
+
+  <header class="site-header">
+    <a href="#orbita" class="brand" aria-label="Nadir, torna all'inizio">
+      <svg viewBox="0 0 32 32" aria-hidden="true"><path d="M6 6v20L26 6v20M6 16h20"/></svg>
+      <span>NADIR</span>
+    </a>
+    <nav aria-label="Navigazione principale">
+      <a class="experience-link" href="#orbita">L'esperienza</a>
+      <a class="games-link" href="#giochi">I giochi <span class="game-count">01</span></a>
+    </nav>
+    <button class="sound-toggle" type="button" aria-pressed="false" aria-label="Attiva l'audio ambientale">
+      <span class="sound-bars" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+      <span class="sound-label">AUDIO OFF</span>
+    </button>
+  </header>
+
+  <aside class="chapter-nav" aria-label="Tappe del viaggio">
+    <a href="#orbita" aria-label="01, Orbita" aria-current="location"><span>Orbita</span><i></i></a>
+    <a href="#atmosfera" aria-label="02, Atmosfera"><span>Atmosfera</span><i></i></a>
+    <a href="#abisso" aria-label="03, Abisso"><span>Abisso</span><i></i></a>
+    <a href="#giochi" aria-label="04, I giochi"><span>I giochi</span><i></i></a>
+  </aside>
+
+  <main>
+    <section id="orbita" class="chapter chapter-orbit" aria-labelledby="orbit-title">
+      <div class="chapter-stage">
+        <div class="orbit-copy chapter-copy">
+          <p class="eyebrow"><span class="tiny-cross" aria-hidden="true">+</span> UN ALTRO MONDO, NEL TUO BROWSER</p>
+          <h1 id="orbit-title">Oltre<br><span>la superficie.</span></h1>
+          <div class="hero-bottom">
+            <p>Lascia il mondo lassù.<br>Il gioco comincia più in basso.</p>
+            <a class="descent-link" href="#atmosfera"><span class="round-arrow" aria-hidden="true">↓</span><span>INIZIA LA DISCESA</span></a>
+          </div>
+        </div>
+        <div class="scene-caption" aria-hidden="true"><span>01 / ORBITA</span><span>IL SILENZIO PRIMA DI TUTTO.</span></div>
+      </div>
+    </section>
+
+    <section id="atmosfera" class="chapter chapter-sky" aria-labelledby="sky-title">
+      <div class="chapter-stage">
+        <div class="chapter-copy sky-copy">
+          <p class="eyebrow">02 — ATMOSFERA</p>
+          <h2 id="sky-title">Lascia andare<br><em>la gravità.</em></h2>
+          <p class="chapter-description">Tra quello che conosci<br>e quello che devi ancora scoprire.</p>
+        </div>
+        <div class="coordinate-note" aria-hidden="true"><span>QUOTA IN DIMINUZIONE</span><div></div><span>PROSEGUI VERSO L'IGNOTO</span></div>
+      </div>
+    </section>
+
+    <section id="abisso" class="chapter chapter-cave" aria-labelledby="cave-title">
+      <div class="chapter-stage">
+        <div class="chapter-copy cave-copy">
+          <p class="eyebrow">03 — ABISSO</p>
+          <h2 id="cave-title">Il buio nasconde.<br><em>La luce rivela.</em></h2>
+          <p class="chapter-description">Qualcosa ti aspetta, qui sotto.</p>
+          <span class="torch-hint"><span aria-hidden="true">✧</span><span class="pointer-hint">Muovi il cursore. Segui la luce.</span></span>
+        </div>
+        <div class="scene-caption" aria-hidden="true"><span>IL SEGNALE È VICINO.</span><span>CONTINUA A SCENDERE ↓</span></div>
+      </div>
+    </section>
+
+    <section id="giochi" class="vault" aria-labelledby="vault-title">
+      <div class="vault-heading">
+        <div><p class="eyebrow"><span class="tiny-cross" aria-hidden="true">+</span> SEI ARRIVATO DALL'ALTRA PARTE</p><h2 id="vault-title">Qui si <em>gioca.</em></h2></div>
+        <p>Un mondo da esplorare.<br>Una partita per cominciare.</p>
+      </div>
+      <div id="game-list" class="game-list"></div>
+      <noscript><div class="noscript-notice">Attiva JavaScript nel browser per giocare a Lumen e vivere il viaggio interattivo.</div></noscript>
+      <footer class="site-footer"><a class="footer-wordmark" href="#orbita">NADIR</a><span>LA SUPERFICIE PUÒ ASPETTARE.</span><a href="#orbita">Torna in orbita <span aria-hidden="true">↑</span></a></footer>
+    </section>
+  </main>
+
+  <div class="journey-hud" aria-hidden="true">
+    <div class="depth-readout"><span id="depth-label">ALTITUDINE</span><strong id="depth-value">+320 <small>km</small></strong></div>
+    <div class="scroll-cue"><span>SCORRI PER ESPLORARE</span><i></i></div>
+    <div class="journey-progress"><span id="journey-percent">00</span><span>/ 100</span></div>
+  </div>
+  <div class="progress-track" aria-hidden="true"><i></i></div>
+
+  <dialog id="game-dialog" aria-labelledby="game-title">
+    <div class="game-shell">
+      <header class="game-header"><div><span class="eyebrow">NADIR / PRIMO VARCO</span><h2 id="game-title">LUMEN<span>LA DISCESA</span></h2></div><button class="close-game icon-button" aria-label="Chiudi il gioco" type="button">✕</button></header>
+      <div class="game-scorebar"><div><span>PUNTI</span><strong id="game-score">0000</strong></div><div><span>RECORD LOCALE</span><strong id="game-best">0000</strong></div><div class="energy-display"><span>ENERGIA</span><strong id="game-lives" aria-label="3 vite">● ● ●</strong></div><button id="pause-game" type="button" class="icon-button" aria-label="Metti in pausa" disabled>Ⅱ</button></div>
+      <div class="playfield">
+        <canvas id="game-canvas" tabindex="0" aria-label="Lumen: sposta la luce con freccia sinistra e destra oppure A e D. Raccogli le sfere luminose ed evita i frammenti. P per pausa."></canvas>
+        <div id="game-overlay" class="game-overlay">
+          <span class="overlay-symbol" aria-hidden="true">✧</span>
+          <p id="game-overlay-kicker" class="eyebrow">UNA LUCE. NESSUN PASSO INDIETRO.</p>
+          <h3 id="game-overlay-title">Quanto in basso<br>riesci ad arrivare?</h3>
+          <p id="game-overlay-copy">Raccogli la luce. Evita i frammenti.<br>Hai tre vite per trovare la tua strada.</p>
+          <button id="start-game" class="primary-button" type="button">Inizia la discesa <span aria-hidden="true">↗</span></button>
+        </div>
+      </div>
+      <div class="game-controls"><span><span class="desktop-controls"><kbd>←</kbd> <kbd>→</kbd> oppure mouse</span><span class="touch-controls">Trascina il dito per muoverti</span></span><span><kbd>P</kbd> Pausa <span class="controls-separator">/</span> <kbd>ESC</kbd> Esci</span></div>
+      <p id="game-announcement" class="sr-only" aria-live="polite"></p>
+    </div>
+  </dialog>
+</body>
+</html>
