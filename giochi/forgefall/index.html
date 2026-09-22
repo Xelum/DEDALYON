@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<title>Forgefall</title>
+<style>
+*{box-sizing:border-box}
+html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#06182a;font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif}
+body{display:grid;place-items:center;touch-action:none}
+.stage{position:relative;width:min(100vw,calc(100vh * 1.5));aspect-ratio:3/2;background:#06182a url('assets/arena_bg_clean.png') center/cover no-repeat;overflow:hidden;box-shadow:0 18px 60px rgba(0,0,0,.45)}
+.board{position:absolute;left:23.047%;top:18.848%;width:54.232%;height:65.820%;display:grid;grid-template-columns:139fr 138fr 138fr 138fr 141fr 139fr;grid-template-rows:106fr 106fr 112fr 114fr 118fr 118fr;gap:0;z-index:8}
+.cell{position:relative;border:0;background:transparent;padding:0;margin:0;display:flex;align-items:center;justify-content:center;overflow:visible;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.cell::after{content:"";position:absolute;inset:4px;border-radius:11px;opacity:0;box-shadow:inset 0 0 0 3px rgba(255,222,105,.92),0 0 14px rgba(255,216,95,.45);transition:opacity .12s}
+.cell.selected::after{opacity:1}
+.sprite-wrap{width:100%;height:100%;display:grid;place-items:center;overflow:visible}
+.sprite{display:block;object-fit:contain;filter:drop-shadow(0 4px 6px rgba(0,0,0,.28));transition:transform .22s ease}
+.sprite.pop{transform:scale(1.08)}
+.level{position:absolute;right:8px;top:6px;min-width:21px;height:21px;padding:0 4px;border-radius:999px;display:grid;place-items:center;background:#243845;color:#fff7d6;font-size:11px;font-weight:900;line-height:1;box-shadow:0 2px 0 rgba(0,0,0,.28)}
+.hud-box{position:absolute;z-index:20;border-radius:15px;border:2px solid #2d6d99;background:linear-gradient(180deg,rgba(18,54,83,.98),rgba(9,34,56,.99));box-shadow:inset 0 1px rgba(255,255,255,.16),0 5px 12px rgba(0,0,0,.28);display:flex;flex-direction:column;justify-content:center;align-items:center;color:#fff;pointer-events:none}
+.hud-box small{display:block;font-size:clamp(8px,.72vw,11px);font-weight:1000;letter-spacing:.14em;color:#bfd7ef;line-height:1}
+.hud-box strong{display:block;margin-top:6px;font-size:clamp(18px,2vw,38px);line-height:1;font-weight:1000;text-shadow:0 2px 0 rgba(0,0,0,.18)}
+#dayHud{left:1.65%;top:1.4%;width:8.9%;height:7.7%}
+#movesHud{left:10.95%;top:1.4%;width:9.2%;height:7.7%}
+#scoreHud{right:3.9%;top:1.4%;width:9.4%;height:7.7%}
+.phase-live{position:absolute;left:50%;top:9.12%;transform:translateX(-50%);z-index:22;min-width:28.5%;height:4.8%;padding:0 22px;display:flex;align-items:center;justify-content:center;border-radius:999px;background:linear-gradient(180deg,rgba(20,134,66,.98),rgba(12,109,53,.99));border:2px solid rgba(255,229,139,.75);box-shadow:0 5px 12px rgba(0,0,0,.2),inset 0 1px rgba(255,255,255,.14);font-size:clamp(8px,.95vw,14px);font-weight:1000;letter-spacing:.02em;color:#fff8dc;text-shadow:0 2px 4px rgba(0,0,0,.25);white-space:nowrap;pointer-events:none}
+.options-btn{position:absolute;right:1.45%;top:1.35%;z-index:24;width:3.9%;aspect-ratio:1;border-radius:14px;border:2px solid #2d6d99;background:linear-gradient(180deg,#123653,#092238);color:#eef6ff;font-size:clamp(17px,2vw,30px);display:grid;place-items:center;cursor:pointer;box-shadow:inset 0 1px rgba(255,255,255,.18),0 5px 12px rgba(0,0,0,.28)}
+.dock{position:absolute;left:29.25%;top:88.95%;width:43.2%;height:8.65%;z-index:21;display:flex;align-items:center;border-radius:18px;background:linear-gradient(180deg,rgba(10,34,55,.985),rgba(6,23,40,.99));border:1px solid rgba(255,255,255,.08);box-shadow:0 8px 20px rgba(0,0,0,.22),inset 0 1px rgba(255,255,255,.04)}
+.dock-icon{width:13%;height:78%;margin-left:2.5%;display:grid;place-items:center;flex:0 0 auto}
+.dock-icon img{max-width:90%;max-height:90%;object-fit:contain;filter:drop-shadow(0 4px 5px rgba(0,0,0,.2))}
+.dock-copy{width:42%;padding-left:1%;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dock-copy small{display:block;font-size:clamp(7px,.75vw,11px);font-weight:900;letter-spacing:.08em;color:#9eb2cb}
+.dock-copy strong{display:block;margin-top:5px;font-size:clamp(11px,1.15vw,18px);color:#fff3da;overflow:hidden;text-overflow:ellipsis}
+.dock-actions{margin-left:auto;display:flex;gap:1.4%;padding-right:2.2%;align-items:center;height:100%;width:31%}
+.action{height:64%;border:0;border-radius:14px;font-weight:1000;font-size:clamp(10px,.95vw,16px);cursor:pointer;box-shadow:inset 0 1px rgba(255,255,255,.35),0 6px 16px rgba(0,0,0,.18)}
+#openBtn{width:45%;background:linear-gradient(180deg,#59a9ff,#2d71ff);color:#fff;display:none}
+#infoBtn{width:45%;background:linear-gradient(180deg,#ffd96c,#f3c747);color:#362509}
+.toast{position:absolute;left:50%;bottom:13%;transform:translateX(-50%) translateY(18px);padding:10px 14px;border-radius:999px;background:rgba(6,19,31,.88);color:#fff;font-size:13px;font-weight:900;opacity:0;transition:.25s;pointer-events:none;z-index:32;white-space:nowrap}.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.modal{position:absolute;inset:0;background:rgba(3,12,20,.52);backdrop-filter:blur(3px);display:none;place-items:center;z-index:40}.modal.show{display:grid}
+.card{width:min(86%,420px);border-radius:24px;padding:20px;background:linear-gradient(180deg,#123653,#091f35);color:white;border:1px solid rgba(255,255,255,.12);box-shadow:0 20px 60px rgba(0,0,0,.4)}
+.card h3{margin:0 0 10px;font-size:24px}.card p{margin:0;color:#d5e0eb;line-height:1.45}.card button{margin-top:18px;padding:11px 16px;border-radius:12px;border:0;background:#ffd66b;color:#2a1f07;font-weight:900;cursor:pointer}
+.announce{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%) scale(.96);z-index:35;opacity:0;pointer-events:none;transition:.22s;width:min(78%,520px);padding:22px 24px;border-radius:24px;background:linear-gradient(180deg,rgba(15,46,75,.94),rgba(6,23,40,.96));border:1px solid rgba(255,255,255,.14);text-align:center;color:#fff;box-shadow:0 30px 70px rgba(0,0,0,.45)}
+.announce.show{opacity:1;transform:translate(-50%,-50%) scale(1)}
+.announce small{display:block;font-size:11px;font-weight:1000;letter-spacing:.2em;color:#a8bdd3}.announce h2{margin:6px 0 4px;font-size:clamp(22px,2.8vw,36px)}.announce p{margin:0;color:#d2e0eb}
+.stage.locked .board,.stage.locked .dock,.stage.locked .options-btn{pointer-events:none;filter:saturate(.82)}
+.boot{position:absolute;inset:0;z-index:100;display:grid;place-items:center;background:linear-gradient(rgba(4,15,27,.76),rgba(4,15,27,.88));backdrop-filter:blur(5px);transition:opacity .45s ease,visibility .45s ease}.boot.hide{opacity:0;visibility:hidden;pointer-events:none}
+.boot-card{width:min(72%,560px);padding:28px 30px;border-radius:28px;text-align:center;background:linear-gradient(180deg,rgba(15,46,75,.97),rgba(6,23,40,.985));border:1px solid rgba(255,255,255,.16);box-shadow:0 35px 100px rgba(0,0,0,.55),inset 0 1px rgba(255,255,255,.08);color:white}
+.boot-card small{display:block;font-size:11px;letter-spacing:.18em;font-weight:1000;color:#a8bdd3}.boot-card h1{margin:7px 0 6px;font-family:Georgia,serif;font-size:clamp(32px,5vw,62px);line-height:1;color:#ffd978;text-shadow:0 4px 0 #5a321d}.boot-card p{margin:0 0 20px;color:#d5e0eb;font-weight:700}
+.load-track{width:100%;height:14px;border-radius:999px;background:#102944;overflow:hidden;box-shadow:inset 0 2px 7px rgba(0,0,0,.28)}.load-bar{height:100%;width:0;border-radius:999px;background:linear-gradient(90deg,#ffb44a,#ffd86e,#7ae683);transition:width .18s ease}.boot-percent{display:block;margin:9px 0 16px;font-size:13px;font-weight:900;color:#9fb6cc}.start-btn{border:0;border-radius:15px;padding:13px 24px;background:linear-gradient(180deg,#ffd96c,#f3b72f);color:#362509;font-weight:1000;font-size:15px;cursor:pointer;box-shadow:inset 0 1px rgba(255,255,255,.35),0 6px 16px rgba(0,0,0,.25);opacity:0;transform:translateY(6px);pointer-events:none;transition:.25s}.start-btn.ready{opacity:1;transform:none;pointer-events:auto}
+@media(max-width:700px){#dayHud{left:1.1%;width:11.3%;height:7.8%}#movesHud{left:12.8%;width:11.6%;height:7.8%}#scoreHud{right:4.3%;width:11.8%;height:7.8%}.hud-box{border-radius:11px}.phase-live{top:9.35%;height:4.5%;padding:0 10px;min-width:34%;font-size:10px}.options-btn{right:1%;width:5.8%;border-radius:10px}.dock{left:23%;width:54%;height:8.8%;top:89%}.dock-copy strong{font-size:12px}.dock-actions{width:35%}.action{border-radius:10px;font-size:11px}.boot-card{width:86%;padding:22px 20px}.boot-card h1{font-size:34px}}
+</style>
+</head>
+<body>
+<div class="stage locked" id="stage">
+  <div class="board" id="board"></div>
+  <div class="hud-box" id="dayHud"><small>GIORNO</small><strong id="dayLive">1</strong></div>
+  <div class="hud-box" id="movesHud"><small>MOSSE</small><strong id="movesHudValue">5</strong></div>
+  <div class="hud-box" id="scoreHud"><small>PUNTI</small><strong id="scoreHudValue">0</strong></div>
+  <div class="phase-live" id="phaseLive">GIORNO 1 · PREPARA LE DIFESE</div>
+  <button class="options-btn" id="optionsBtn" type="button" aria-label="Opzioni">⚙</button>
+  <div class="boot" id="boot"><div class="boot-card"><small>MEDUSA GAMES / 01</small><h1>FORGEFALL</h1><p id="bootText">Preparazione del bastione…</p><div class="load-track"><div class="load-bar" id="loadBar"></div></div><span class="boot-percent" id="loadPercent">0%</span><button class="start-btn" id="startBtn" type="button">INIZIA PARTITA</button></div></div>
+  <div class="dock" id="dockBar"><div class="dock-icon"><img id="dockImg" alt=""></div><div class="dock-copy"><small id="dockKind">SELEZIONE</small><strong id="dockName">Tocca una casella per vedere i dettagli</strong></div><div class="dock-actions"><button class="action" id="openBtn" type="button">APRI</button><button class="action" id="infoBtn" type="button">INFO</button></div></div>
+  <div class="toast" id="toast"></div>
+  <div class="announce" id="announce"><small id="annKicker">FORGEFALL</small><h2 id="annTitle">Pronto</h2><p id="annText">Comincia la difesa.</p></div>
+  <div class="modal" id="modal"><div class="card"><h3 id="modalTitle">Elemento</h3><p id="modalText">Descrizione.</p><button id="closeModal" type="button">Chiudi</button></div></div>
+  <div class="modal" id="optionsModal"><div class="card"><h3>Opzioni</h3><p>Metti in pausa o ricomincia la partita.</p><button id="continueBtn" type="button">Continua</button><button id="restartOption" type="button" style="display:block;width:100%;margin-top:10px;background:#59a9ff;color:#fff">Ricomincia partita</button></div></div>
+</div>
+<script>
+const ASSET={
+  mat_ice:'assets/opt/mat_ice.webp',mat_copper:'assets/opt/mat_copper.webp',mat_iron:'assets/opt/mat_iron.webp',mat_fire:'assets/opt/mat_fire.webp',mat_wood:'assets/opt/mat_wood.webp',
+  copper_1:'assets/opt/copper_1.webp',copper_2:'assets/opt/copper_2.webp',copper_3:'assets/opt/copper_3.webp',copper_4:'assets/opt/copper_4.webp',copper_5:'assets/opt/copper_5.webp',
+  iron_1:'assets/opt/iron_1.webp',iron_2:'assets/opt/iron_2.webp',iron_3:'assets/opt/iron_3.webp',iron_4:'assets/opt/iron_4.webp',iron_5:'assets/opt/iron_5.webp',
+  fire_1:'assets/opt/fire_1.webp',fire_2:'assets/opt/fire_2.webp',fire_3:'assets/opt/fire_3.webp',fire_4:'assets/opt/fire_4.webp',fire_5:'assets/opt/fire_5.webp',
+  wood_1:'assets/opt/wood_1.webp',wood_2:'assets/opt/wood_2.webp',wood_3:'assets/opt/wood_3.webp',wood_4:'assets/opt/wood_4.webp',wood_5:'assets/opt/wood_5.webp',
+  ice_1:'assets/opt/ice_1.webp',ice_2:'assets/opt/ice_2.webp',ice_3:'assets/opt/ice_3.webp',ice_4:'assets/opt/ice_4.webp',ice_5:'assets/opt/ice_5.webp'
+};
+const SIZE=6;
+const TYPES=['wood','ice','fire','iron','copper'];
+const NAMES={wood:['Legno','Cassa del fabbro'],ice:['Cristallo di ghiaccio','Muro di ghiaccio'],fire:['Fuoco','Balestra ardente'],iron:['Ferro','Cannone d’assedio'],copper:['Rame','Torre degli arcieri']};
+const SCALE={
+  material:{wood:.58,ice:.64,fire:.54,iron:.55,copper:.58},
+  structure:{wood:.64,ice:.72,fire:.66,iron:.68,copper:.64}
+};
+function initialBoard(){ return [
+  {kind:'material',type:'wood'},{kind:'material',type:'ice'},{kind:'material',type:'fire'},{kind:'material',type:'iron'},{kind:'material',type:'copper'},{kind:'material',type:'wood'},
+  {kind:'material',type:'ice'},{kind:'material',type:'fire'},{kind:'material',type:'copper'},{kind:'material',type:'wood'},{kind:'material',type:'iron'},{kind:'material',type:'ice'},
+  {kind:'material',type:'copper'},{kind:'material',type:'wood'},{kind:'material',type:'ice'},{kind:'material',type:'fire'},{kind:'material',type:'copper'},{kind:'material',type:'iron'},
+  {kind:'material',type:'fire'},{kind:'material',type:'iron'},{kind:'material',type:'wood'},{kind:'material',type:'copper'},{kind:'material',type:'ice'},{kind:'material',type:'fire'},
+  {kind:'material',type:'iron'},{kind:'material',type:'copper'},{kind:'material',type:'fire'},{kind:'material',type:'ice'},{kind:'material',type:'wood'},{kind:'material',type:'iron'},
+  {kind:'material',type:'wood'},{kind:'material',type:'fire'},{kind:'material',type:'iron'},{kind:'material',type:'copper'},{kind:'material',type:'wood'},{kind:'material',type:'ice'}
+].map(cloneTile);} 
+let board=initialBoard(),day=1,selected=-1,moves=5,score=0,busy=false,touchStart=null,gameStarted=false;
+const el=id=>document.getElementById(id), boardEl=el('board');
+function assetFor(t){ if(t.kind==='material') return ASSET['mat_'+t.type]; return ASSET[t.type+'_'+Math.min(t.level||1,5)]||ASSET[t.type+'_1']; }
+function cloneTile(t){return JSON.parse(JSON.stringify(t));}
+function idx(r,c){return r*SIZE+c} function rc(i){return [Math.floor(i/SIZE),i%SIZE]}
+function adjacent(a,b){const [ra,ca]=rc(a),[rb,cb]=rc(b);return Math.abs(ra-rb)+Math.abs(ca-cb)===1}
+function spriteScale(tile){return ((SCALE[tile.kind]&&SCALE[tile.kind][tile.type])||.62)*100}
+function render(popIndex=-1){const frag=document.createDocumentFragment();board.forEach((t,i)=>{const b=document.createElement('button');b.className='cell '+t.kind+' type-'+t.type+(i===selected?' selected':'');b.dataset.i=i;const wrap=document.createElement('span');wrap.className='sprite-wrap';const im=document.createElement('img');im.className='sprite'+(i===popIndex?' pop':'');im.src=assetFor(t);im.alt='';im.draggable=false;const sc=spriteScale(t);im.style.width=sc+'%';im.style.height=sc+'%';wrap.append(im);b.append(wrap);if(t.kind==='structure'){const lv=document.createElement('span');lv.className='level';lv.textContent=t.level||1;b.append(lv)}frag.append(b)});boardEl.replaceChildren(frag);updateDock()}
+function updateDock(){const hasSel=selected>=0&&board[selected];const openBtn=el('openBtn'),infoBtn=el('infoBtn');if(!hasSel){el('dockImg').src=ASSET.mat_wood;el('dockKind').textContent='SELEZIONE';el('dockName').textContent='Tocca una casella per vedere i dettagli';openBtn.style.display='none';infoBtn.disabled=true;infoBtn.style.opacity='.5';infoBtn.style.cursor='default';return}const t=board[selected];el('dockImg').src=assetFor(t);el('dockKind').textContent=t.kind==='structure'?`DIFESA · LIVELLO ${t.level||1}`:'MATERIALE';el('dockName').textContent=NAMES[t.type][t.kind==='structure'?1:0];infoBtn.disabled=false;infoBtn.style.opacity='1';infoBtn.style.cursor='pointer';const canOpen=t.kind==='structure'&&t.type==='wood';openBtn.style.display=canOpen?'block':'none';}
+function updateHud(){el('movesHudValue').textContent=moves;el('scoreHudValue').textContent=score;el('dayLive').textContent=day;el('phaseLive').textContent=`GIORNO ${day} · PREPARA LE DIFESE`;}
+let toastTimer;function toast(s){el('toast').textContent=s;el('toast').classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>el('toast').classList.remove('show'),2200)}
+let annTimer;function announce(title,text,k='FORGEFALL'){el('annTitle').textContent=title;el('annText').textContent=text;el('annKicker').textContent=k;el('announce').classList.add('show');clearTimeout(annTimer);annTimer=setTimeout(()=>el('announce').classList.remove('show'),1900)}
+function key(t){return t.kind==='material'?`m:${t.type}`:`s:${t.type}:${t.level||1}`}
+function findMatches(){const runs=[];for(let r=0;r<SIZE;r++){let s=0;for(let c=1;c<=SIZE;c++){if(c<SIZE&&key(board[idx(r,c)])===key(board[idx(r,s)]))continue;if(c-s>=3)runs.push(Array.from({length:c-s},(_,k)=>idx(r,s+k)));s=c}}for(let c=0;c<SIZE;c++){let s=0;for(let r=1;r<=SIZE;r++){if(r<SIZE&&key(board[idx(r,c)])===key(board[idx(s,c)]))continue;if(r-s>=3)runs.push(Array.from({length:r-s},(_,k)=>idx(s+k,c)));s=r}}return runs}
+function randMaterial(){return {kind:'material',type:TYPES[Math.floor(Math.random()*TYPES.length)]}}
+function collapseRefill(){for(let c=0;c<SIZE;c++){const keep=[];for(let r=SIZE-1;r>=0;r--){const t=board[idx(r,c)];if(t)keep.push(t)}for(let r=SIZE-1,k=0;r>=0;r--,k++)board[idx(r,c)]=keep[k]||randMaterial()}}
+function wait(ms){return new Promise(r=>setTimeout(r,ms))}
+async function resolve(preferred){let guard=0;while(guard++<8){const runs=findMatches();if(!runs.length)break;await wait(140);const used=new Set();for(const run of runs){const group=run.filter(i=>!used.has(i));if(group.length<3)continue;group.forEach(i=>used.add(i));const src=cloneTile(board[group[0]]);let target=(preferred!=null&&group.includes(preferred))?preferred:group[Math.floor(group.length/2)];let next;if(src.kind==='material')next={kind:'structure',type:src.type,level:1};else next={kind:'structure',type:src.type,level:Math.min(5,(src.level||1)+1)};group.forEach(i=>board[i]=null);board[target]=next;score+=src.kind==='material'?120:220;announce(src.kind==='material'?'Grande!':'Upgrade!',src.kind==='material'?`Hai appena costruito ${NAMES[next.type][1]}`:`${NAMES[next.type][1]} livello ${next.level}`,src.kind==='material'?'NUOVA STRUTTURA':'STRUTTURA POTENZIATA');}collapseRefill();updateHud();render(preferred);await wait(180);preferred=null;}}
+async function swap(a,b){if(!gameStarted||busy||!adjacent(a,b))return;busy=true;[board[a],board[b]]=[board[b],board[a]];moves=Math.max(0,moves-1);score+=10;selected=b;updateHud();render(b);await resolve(b);busy=false;if(moves===0){toast('MOSSE TERMINATE · NUOVO GIORNO');setTimeout(()=>{day+=1;moves=5;updateHud();toast(`GIORNO ${day} · +5 MOSSE`)},1400)}}
+boardEl.addEventListener('click',e=>{if(!gameStarted)return;const c=e.target.closest('.cell');if(!c||busy)return;const i=+c.dataset.i;if(i===selected){selected=-1;render();return}if(selected>=0&&adjacent(selected,i)){swap(selected,i);return}selected=i;render()});
+boardEl.addEventListener('pointerdown',e=>{if(!gameStarted)return;const c=e.target.closest('.cell');if(!c)return;touchStart={i:+c.dataset.i,x:e.clientX,y:e.clientY}});
+boardEl.addEventListener('pointerup',e=>{if(!touchStart||busy)return;const dx=e.clientX-touchStart.x,dy=e.clientY-touchStart.y;if(Math.hypot(dx,dy)<18){touchStart=null;return}let [r,c]=rc(touchStart.i);if(Math.abs(dx)>Math.abs(dy))c+=dx>0?1:-1;else r+=dy>0?1:-1;if(r>=0&&r<SIZE&&c>=0&&c<SIZE)swap(touchStart.i,idx(r,c));touchStart=null});
+el('openBtn').addEventListener('click',async()=>{const t=board[selected];if(busy||!t||t.kind!=='structure'||t.type!=='wood')return toast('Seleziona una Cassa del fabbro');busy=true;announce('Stai aprendo','Cassa del fabbro','CASSA SPECIALE');await wait(650);const bonus=2+Math.floor(Math.random()*3);moves+=bonus;score+=75;board[selected]=null;collapseRefill();selected=-1;updateHud();render();announce(`+${bonus} MOSSE`,'Ricompensa ottenuta','RICOMPENSA');busy=false});
+el('infoBtn').addEventListener('click',()=>{if(selected<0||!board[selected])return;const t=board[selected];el('modalTitle').textContent=NAMES[t.type][t.kind==='structure'?1:0];el('modalText').textContent=t.kind==='material'?'Un materiale del tabellone. Unisci 3 elementi uguali per costruire la relativa difesa.':`Difesa di livello ${t.level||1}. Unisci 3 difese uguali dello stesso livello per potenziarla.`;el('modal').classList.add('show')});
+el('closeModal').addEventListener('click',()=>el('modal').classList.remove('show'));el('modal').addEventListener('click',e=>{if(e.target===el('modal'))el('modal').classList.remove('show')});
+function resetGame(showMessage=true){day=1;moves=5;score=0;selected=-1;busy=false;board=initialBoard();updateHud();render();if(showMessage)announce('Nuova partita','5 mosse per preparare il bastione','GIORNO 1')}
+function closeOptions(){el('optionsModal').classList.remove('show')}
+el('optionsBtn').addEventListener('click',()=>{if(!gameStarted)return;el('optionsModal').classList.add('show')});el('continueBtn').addEventListener('click',closeOptions);el('optionsModal').addEventListener('click',e=>{if(e.target===el('optionsModal'))closeOptions()});el('restartOption').addEventListener('click',()=>{closeOptions();resetGame(true)});
+function fakeLoad(){let pct=0;const timer=setInterval(()=>{pct=Math.min(100,pct+Math.max(2,Math.floor(Math.random()*9)));el('loadBar').style.width=pct+'%';el('loadPercent').textContent=pct+'%';if(pct<38)el('bootText').textContent='Preparazione del bastione…';else if(pct<72)el('bootText').textContent='Caricamento delle difese…';else if(pct<100)el('bootText').textContent='Schieramento dei materiali…';else{clearInterval(timer);el('bootText').textContent='Bastione pronto.';el('startBtn').classList.add('ready')}},90)}
+el('startBtn').addEventListener('click',()=>{gameStarted=true;resetGame(false);el('stage').classList.remove('locked');el('boot').classList.add('hide');setTimeout(()=>announce('Giorno 1','Hai 5 mosse per costruire le prime difese','BENVENUTO A FORGEFALL'),350)});
+render();updateHud();fakeLoad();
+</script>
+</body>
+</html>
