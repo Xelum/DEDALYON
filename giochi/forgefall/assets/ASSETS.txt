@@ -1,5 +1,0 @@
-Forgefall v5 assets
-
-water.png, grass.png, cliff.png
-Original procedural pixel textures created for Medusa Games / Forgefall v5.
-No third-party art is bundled in this folder.

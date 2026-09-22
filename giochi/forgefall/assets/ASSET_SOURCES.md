@@ -1,1 +1,0 @@
-Forgefall v7 uses original SVG assets and locally generated textures. Reference research: Kenney Tower Defense and Foozle Spire packs (CC0). No third-party sprite is bundled.
