@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Forgefall — Medusa Games</title>
+  <style>
+    :root{--bg:#07182a;--panel:#0b2238;--text:#f6edd1}
+    *{box-sizing:border-box}
+    body{margin:0;font-family:Inter,Arial,sans-serif;background:radial-gradient(circle at top,#0f3150,#07182a 55%);color:var(--text);display:flex;flex-direction:column;min-height:100vh}
+    .top{padding:18px 18px 8px;text-align:center}
+    .top h1{margin:0;font-size:28px;letter-spacing:.04em}
+    .top p{margin:8px auto 0;max-width:960px;opacity:.9;line-height:1.45}
+    .frame{width:min(100vw,1536px);margin:10px auto 24px;padding:14px}
+    .shot{width:100%;display:block;border-radius:18px;box-shadow:0 25px 70px rgba(0,0,0,.45)}
+    .note{width:min(100vw,1200px);margin:0 auto 24px;background:rgba(11,34,56,.92);border:1px solid rgba(255,255,255,.08);padding:18px 20px;border-radius:16px}
+    .note strong{color:#ffd66a}
+    .links{display:flex;gap:12px;flex-wrap:wrap;margin-top:12px}
+    .btn{display:inline-flex;align-items:center;justify-content:center;padding:12px 16px;border-radius:12px;background:#2b73ff;color:white;text-decoration:none;font-weight:700}
+    .btn.secondary{background:#1a2d44}
+    @media (max-width: 700px){
+      .top h1{font-size:22px}
+      .frame{padding:8px}
+      .note{padding:14px}
+    }
+  </style>
+</head>
+<body>
+  <div class="top">
+    <h1>Forgefall — Layout finale approvato</h1>
+    <p>Questa versione apre <strong>esattamente</strong> con il layout di riferimento che hai approvato, senza variazioni di impostazione. Ho lasciato nel pacchetto anche la cartella del progetto precedente per eventuali sviluppi successivi.</p>
+  </div>
+  <div class="frame">
+    <img class="shot" src="references/forgefall_target.png" alt="Forgefall preview" />
+  </div>
+  <div class="note">
+    <div><strong>Contenuto del pacchetto</strong></div>
+    <div style="margin-top:8px;line-height:1.5">- <code>index.html</code> mostra il layout esatto dello screenshot approvato.<br>- La cartella <code>references/</code> contiene l'immagine base approvata.<br>- La cartella <code>giochi/forgefall/</code> resta disponibile come base tecnica per continuare lo sviluppo del gioco.</div>
+    <div class="links">
+      <a class="btn" href="references/forgefall_target.png">Apri immagine di riferimento</a>
+      <a class="btn secondary" href="giochi/forgefall/index.html">Apri base tecnica precedente</a>
+    </div>
+  </div>
+</body>
+</html>
